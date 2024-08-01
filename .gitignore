@@ -1,0 +1,55 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+
+# Compiled binary addons (https://nodejs.org/api/addons.html)
+build/Release
+react_js/build
+
+
+
+# Dependency directories
+node_modules/
+express_js/node_modules
+react_js/node_modules
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# dotenv environment variable files
+.env
+.env.development.local
+.env.test.local
+.env.production.local
+.env.local
+react_js/.env
+react_js/.npmrc
+package-lock.json
+express_js/package-lock.json
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
