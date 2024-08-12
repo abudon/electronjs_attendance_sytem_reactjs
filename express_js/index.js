@@ -1,7 +1,5 @@
 ///////////// IMPORTS ///////////////////
-require('dotenv').config({
-    path: '../.env'
-})
+require('dotenv').config({path: '../.env'})
 const express = require('express');
 const cors = require('cors');
 const ZKLib = require('qr-zklib')
@@ -73,7 +71,7 @@ const getUsers = async (userId) => {
 
 /// SMS Functions
 const sendSMS = (time, name, phoneNumber1, phoneNumber2, parentName)=>{
-    const formattedTime = time.toLocaleDateString('default',{year: "numeric",
+    const formattedTime = new Date(time).toLocaleDateString('default',{year: "numeric",
                                                                                                         month: "short",
                                                                                                         day: "numeric",
                                                                                                         hour: "numeric",
@@ -114,9 +112,13 @@ const sendSMS = (time, name, phoneNumber1, phoneNumber2, parentName)=>{
 
 const sendAttendanceRecords = async (data, time, userId) => {
     const userInfo = await data;
-    const formattedTime = new Date(time).toISOString().replace(/:/g, '_');
+
+    // Replace invalid characters in the timestamp
+    const formattedTime = new Date(time).toISOString().replace(/[:.]/g, '_');
+
     let check = '';
-    check = (hour <= 9)? 'Check-In':(hour>9 && hour<12)?"Break Time (In/Out)":"Check-Out"
+    check = (hour <= 9) ? 'Check-In' : (hour > 9 && hour < 12) ? "Break Time (In/Out)" : "Check-Out";
+
     const sendParameters = {
         name: userInfo.name,
         type: userInfo.type,
@@ -125,15 +127,17 @@ const sendAttendanceRecords = async (data, time, userId) => {
         contact: userInfo.phoneNumber1,
         registrarId: userId
     }
-    const notificationReference = ref(database,`notifications/${formattedTime}`)
-    await set(notificationReference,sendParameters)
+
+    // Use the sanitized formattedTime as part of the path
+    const notificationReference = ref(database, `notifications/${formattedTime}`);
+    await set(notificationReference, sendParameters);
 }
 
 const sendAppMessage =
     async (time, name, parentName, userId) => {
     try {
 
-        const formattedTime = time.toLocaleDateString('default', {
+        const formattedTime = new Date(time).toLocaleDateString('default', {
             year: "numeric",
             month: "short",
             day: "numeric",

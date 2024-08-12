@@ -1,21 +1,17 @@
 ///////////// IMPORTS ///////////////////
-
-const { app, BrowserWindow } = require('electron');
+require('dotenv').config({ path: path.join(__dirname, '.env') })
 const path = require('path');
+const { app, BrowserWindow } = require('electron');
 const expressApp = require("./express_js/index.js");
 
 ///////////// VARIABLES ///////////////////
 
-const expressPort = process.env.PORT;
+const expressPort = process.env.EXPRESS_PORT;
 let mainWindow;
-let isDev;
 
 ///////////// FUNCTIONS ///////////////////
 
-async function loadDevFlag() {
-    const devModule = await import('electron-is-dev');
-    isDev = devModule.default;
-}
+
 
 function createWindow() {
     mainWindow = new BrowserWindow({
@@ -33,19 +29,12 @@ function createWindow() {
     mainWindow.setMenuBarVisibility(false);
 
     // Load the React.js application
-    if (isDev) {
-        mainWindow.loadURL('http://localhost:3006')
-            .then(() => console.log("Frontend loaded successfully"))
-            .catch(e => console.error("Failed to load frontend", e));
-    } else {
-        mainWindow.loadFile(path.join(__dirname, 'react_js/build/index.html'))
-            .then(() => console.log("Production frontend ready"))
-            .catch(e => console.log('Production interface not found', e));
-    }
+    mainWindow.loadFile(path.join(__dirname, 'react_js/build/index.html'))
+        .then(() => console.log("Production frontend ready"))
+        .catch(e => console.log('Production interface not found', e));
 
     mainWindow.on('closed', () => {
         mainWindow = null;
-        expressApp.close();
     });
 }
 
@@ -61,7 +50,6 @@ function restoreWindow() {
 
 ///////////// CALLS AND LISTENERS ///////////////////
 app.whenReady().then(async () => {
-    await loadDevFlag();
     createWindow();
     expressApp.listen(expressPort);
 });
@@ -69,6 +57,7 @@ app.whenReady().then(async () => {
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
         app.quit();
+
     }
 });
 

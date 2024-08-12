@@ -1,7 +1,7 @@
 {
   "name": "fortville_schoolgate",
   "version": "2.0.0",
-  "description": "Zkt School  Attendance system with Reactjs, Expressjs and Electronjs",
+  "description": "Zkt School Attendance system with Reactjs, Expressjs and Electronjs",
   "main": "index.js",
   "scripts": {
     "start-client": "cd react_js && npm start",
@@ -10,38 +10,13 @@
     "electron-start": "wait-on tcp:3006 && electron .",
     "electron-dev": "concurrently \"npm run start\" \"npm run electron-start\"",
     "build": "cd react_js && npm run build",
-    "electron-build": "npm run build && electron-builder",
-    "package": "npm run electron-build",
+    "package": "npm run build && npm run package-electron",
+    "package-electron": "electron-builder",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/abudon/electronjs_attendance_sytem_reactjs.git"
-  },
-  "build": {
-    "productName": "FortVille SchoolGate",
-    "appId": "com.anonymous.project_two",
-    "files": [
-      "react_js/build/**/*",
-      "express_js/**/*",
-      "index.js",
-      "package.json"
-    ],
-    "directories": {
-      "buildResources": "assets"
-    },
-    "win": {
-      "target": "nsis"
-    },
-    "mac": {
-      "target": "dmg"
-    },
-    "linux": {
-      "target": "AppImage"
-    },
-    "extraMetadata": {
-      "main": "index.js"
-    }
   },
   "keywords": [],
   "author": "",
@@ -51,10 +26,10 @@
   },
   "homepage": "https://github.com/abudon/electronjs_attendance_sytem_reactjs#readme",
   "devDependencies": {
-    "@electron/packager": "^18.3.3",
     "concurrently": "^8.2.2",
     "cross-env": "^7.0.3",
     "electron": "^31.2.0",
+    "electron-builder": "^24.13.3",
     "wait-on": "^7.2.0"
   },
   "dependencies": {
@@ -67,5 +42,25 @@
     "moment": "^2.30.1",
     "node-fetch": "^3.3.2",
     "qr-zklib": "^1.0.3"
+  },
+  "build": {
+    "appId": "com.anonymous.fortvilleschoolgate",
+    "productName": "FortVilleSchoolGate",
+    "directories": {
+      "buildResources": "assets"
+    },
+    "files": [
+      "**/*",
+      "!node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme,test}",
+      "!**/node_modules/.bin",
+      "!**/node_modules/{test,tests}"
+    ],
+    "win": {
+      "icon": "assets/icons/icon.ico",
+      "target": [
+        "nsis",
+        "portable"
+      ]
+    }
   }
 }
