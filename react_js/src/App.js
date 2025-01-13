@@ -31,11 +31,47 @@ import SignUp from "./layouts/authentication/sign-up";
 import EditUserPage from "./layouts/users/editusers";
 import AddUserPage from "./layouts/users/addusers";
 
+import axios from "axios";
+import io from 'socket.io-client'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 export default function App() {
   const [state, dispatch] = usePhotoLabContext();
   const { miniSidenav, layout, openConfigurator, sidenavColor } = state;
   const [onMouseEnter, setOnMouseEnter] = useState(false);
   const { pathname } = useLocation();
+  const [smsAlert, setSmsAlert] = useState({});
+  const socket = io('http://localhost:8000');
+
+  //SMS ALERT FUNCTIONS
+  useEffect(() => {
+    axios.get('http://localhost:8000/sms').then(response=>{
+      setSmsAlert(JSON.parse(response.data))
+    }).catch((error)=>console.log(error))
+
+  }, []);
+
+  useEffect(() => {
+    socket.on('smsSent', (smsData) => {
+      // Display a toast notification when an SMS is sent
+      toast.info(`SMS Status: ${smsData.status}\nMessage: ${smsData.message}`, {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    });
+
+    // Cleanup on component unmount
+    return () => {
+      socket.off('smsSent');
+    };
+  }, []);
+
 
 
   // Open sidenav when mouse enter on mini sidenav
@@ -106,6 +142,7 @@ export default function App() {
 
   return (
       <ThemeProvider theme={theme}>
+        <ToastContainer />
         <CssBaseline />
         {shouldShowDashboard && layout === "dashboard" && (
             <>

@@ -7,6 +7,8 @@ import {useNavigate,} from "react-router-dom";
 
 // @mui material components
 import Switch from "@mui/material/Switch";
+import {Alert} from "@mui/material";
+import {Password, Person} from "@mui/icons-material";
 
 // Soft UI Dashboard React components
 import SoftBox from "components/SoftBox";
@@ -22,8 +24,7 @@ import curved9 from "assets/images/School-Building-3.jpg";
 
 // Context
 import {useLoginContext} from "../../../context/loggingConxtext";
-import {Alert} from "@mui/material";
-import {Password, Person} from "@mui/icons-material";
+
 
 //Database
 import {database} from "../../../utils/firebaseConfig"
@@ -36,7 +37,8 @@ function SignIn() {
     password: ""
   });
   const [message, setMessage] = useState('');
-  const navigate = useNavigate()
+  const [hidden, setHidden] = useState(true);
+  const navigate = useNavigate();
   const [alert, setAlert] = useState(null);
   const {setUsername, setDepartment} = useLoginContext()
 
@@ -148,15 +150,34 @@ function SignIn() {
               Password
             </SoftTypography>
           </SoftBox>
-          <SoftInput
-              icon={{
-                component: <Password/>,
-                direction: "right"
+          <SoftBox
+              sx={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  border: '0.0625rem solid',
+                  borderColor: '#d2d6da',
+                  borderRadius: '0.5rem',
+                  paddingRight: '5px',
+                  backgroundColor: '#ffffff',
               }}
-              onChange={handleonChange}
-              type={'password'}
-              name="password"
-              placeholder="Password" />
+          >
+            <SoftInput
+                sx={{ border: 'none' }}
+                onChange={handleonChange}
+                type={hidden ? 'password':'text'}
+                name="password"
+                placeholder="Password" />
+              <Password
+                  sx={{
+                    cursor: 'pointer'
+                  }}
+                  onClick={()=> setHidden(prevState => !prevState) }
+              />
+          </SoftBox>
+
+
+
         </SoftBox>
         <SoftBox display="flex" alignItems="center">
           <Switch checked={rememberMe} onChange={handleSetRememberMe} />

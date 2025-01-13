@@ -60,7 +60,7 @@ const EditUserPage = () => {
         remove(userDataBaseReference).then(() => {
             console.log('Deleted successfully');
             setAlertDelete(true);
-            navigate("/user")
+            navigate("/users")
         }).catch(e => {
             console.error(e);
             setAlertDelete(false);

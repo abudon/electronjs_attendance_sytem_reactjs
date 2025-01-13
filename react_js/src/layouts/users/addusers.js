@@ -288,7 +288,7 @@ const AddUserPage = () => {
                                         />
                                     </SoftBox>
                                     <SoftBox mb={2} mx={1} shadow={'enable'} width={"50%"}>
-                                        <SoftTypography fontSize={'small'} textAlign={'left'} variant={'h6'} fontWeight={'bold'}>Subject Taught</SoftTypography>
+                                        <SoftTypography fontSize={'small'} textAlign={'left'} variant={'h6'} fontWeight={'bold'}>Professional Title <span style={{fontSize: "8px"}}>(staff only)</span></SoftTypography>
                                         <SoftInput
                                             variant="filled"
                                             type="text"
@@ -390,7 +390,7 @@ const AddUserPage = () => {
                                         >
                                             <MenuItem value={"student"}>Student</MenuItem>
                                             <MenuItem value={"admin"}>Admin</MenuItem>
-                                            <MenuItem value={"teacher"}>Teacher</MenuItem>
+                                            <MenuItem value={"staff"}>Staff</MenuItem>
                                         </Select>
                                         <SoftTypography variant="caption" color="error">
                                             {formik.touched.type && formik.errors.type}
