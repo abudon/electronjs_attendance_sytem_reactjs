@@ -1,7 +1,7 @@
 
 import React from "react";
 import ReactDOM from "react-dom/client";
-import {HashRouter} from "react-router-dom";
+import {BrowserRouter} from "react-router-dom";
 import App from "App";
 import '@fontsource/inter';
 
@@ -12,11 +12,11 @@ import {LoginProvider} from "./context/loggingConxtext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <HashRouter>
+  <BrowserRouter>
     <PhotoLabContextProvider >
         <LoginProvider>
                 <App />
         </LoginProvider>
     </PhotoLabContextProvider >
-  </HashRouter>
+  </BrowserRouter>
 );
