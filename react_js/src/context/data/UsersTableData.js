@@ -8,25 +8,30 @@ import { database } from "../../utils/firebaseConfig";
 import { onValue, ref } from "firebase/database";
 
 // COMPONENT AND FUNCTIONS
-function Author({ name, grade, subject }) {
-    const newValue = subject && subject.trim() !== "" ?
-        subject : (grade && grade.trim() !== "" ? grade : "");
-
+function Author({ name }) {
     return (
         <Box display="flex" alignItems="center" px={1}>
             <Box display="flex" flexDirection="column">
                 <Typography variant="button" fontWeight="bold">
                     {name}
                 </Typography>
-                <Typography variant="caption" color="textSecondary">
-                    {newValue}
-                </Typography>
             </Box>
         </Box>
     );
 }
 
-const Gender = ({ gender, dob }) => {
+const Department = ({grade, subject}) => {
+    const newValue = subject && subject.trim() !== "" ?
+        subject : (grade && grade.trim() !== "" ? grade : "");
+    return (
+        <Box display="flex" alignItems="center" px={1}>
+            <Typography variant="caption" color="textSecondary">
+                {newValue}
+            </Typography>
+        </Box>
+    )
+}
+const Gender = ({ gender }) => {
     return (
         <Box
             alignItems="center"
@@ -47,17 +52,12 @@ const Gender = ({ gender, dob }) => {
             >
                 {gender.toUpperCase()}
             </Typography>
-            <Typography
-                variant="caption"
-                sx={{ fontSize: "11px", fontWeight: "bold" }}
-            >
-                {dob}
-            </Typography>
+
         </Box>
     );
 };
 
-const Role = ({ type, contact }) => {
+const Role = ({ type}) => {
     return (
         <Box
             alignItems="center"
@@ -76,12 +76,6 @@ const Role = ({ type, contact }) => {
                 }}
             >
                 {type?.toUpperCase()}
-            </Typography>
-            <Typography
-                variant="caption"
-                sx={{ fontSize: "11px", fontWeight: "bold" }}
-            >
-                {contact}
             </Typography>
         </Box>
     );
@@ -164,13 +158,11 @@ const UsersData = () => {
     useEffect(() => {
         const newDedo = users.map((user) => {
             const alpha = {
-                name: user.fullname,
                 grade: user.grade,
                 subject: user.subjectTaught,
             };
             const beta = {
                 gender: user.gender,
-                dob: user.dateOfBirth,
             };
             const gamma = {
                 type: user.type,
@@ -179,7 +171,8 @@ const UsersData = () => {
 
             return {
                 userid: user.userid,
-                fullname: alpha,
+                fullname: user.fullname,
+                department: alpha,
                 gender: beta,
                 role: gamma,
                 qualification: user.highestQualification,
@@ -238,7 +231,16 @@ const UsersData = () => {
             label: "Full Name",
             options: {
                 customBodyRender: (value) => (
-                    <Author name={value.name} grade={value.grade} subject={value.subject} />
+                    <Author name={value}  />
+                ),
+            },
+        },
+        {
+            name: "department",
+            label: "Department",
+            options: {
+                customBodyRender: (value) => (
+                    <Department subject={value.subject} grade={value.grade}  />
                 ),
             },
         },
@@ -247,7 +249,7 @@ const UsersData = () => {
             label: "Gender",
             options: {
                 customBodyRender: (value) => (
-                    <Gender gender={value.gender} dob={value.dob} />
+                    <Gender gender={value.gender}  />
                 ),
             },
         },
@@ -256,7 +258,7 @@ const UsersData = () => {
             label: "Role",
             options: {
                 customBodyRender: (value) => (
-                    <Role type={value.type} contact={value.contact} />
+                    <Role type={value.type} />
                 ),
             },
         },

@@ -34,7 +34,7 @@ const routes = [
   {
     type: "collapse",
     name: "Analytics",
-    key: "billing",
+    key: "analysis",
     route: "/analysis",
     icon: <Analytics size="12px" />,
     component: <AnalyticsPage />,

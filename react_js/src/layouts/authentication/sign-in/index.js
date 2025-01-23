@@ -23,7 +23,7 @@ import curved9 from "assets/images/School-Building-3.jpg";
 // Context
 import {useLoginContext} from "../../../context/loggingConxtext";
 import {Alert} from "@mui/material";
-import {Password, Person} from "@mui/icons-material";
+import {Key, Password, Person, RemoveRedEyeOutlined} from "@mui/icons-material";
 
 //Database
 import {database} from "../../../utils/firebaseConfig"
@@ -38,18 +38,22 @@ function SignIn() {
   const [message, setMessage] = useState('');
   const navigate = useNavigate()
   const [alert, setAlert] = useState(null);
+  const [icon, setIcon] = useState(true);
   const {setUsername, setDepartment} = useLoginContext()
 
 
-  useEffect(() => {
-    console.log('Username updated:', logins);
-  }, [logins]);
+  const handleSetRememberMe = () => {
+    setRememberMe(!rememberMe);
+    if (rememberMe) {
+      const logs = JSON.stringify(logins)
+      localStorage.setItem('rememberMe',logs);
+    }else {
+      localStorage.removeItem('rememberMe');
+    }
+  }
 
 
-  const handleSetRememberMe = () => setRememberMe(!rememberMe);
-
-
-  const handleonChange = useCallback((event) => {
+  const handleOnChange = useCallback((event) => {
     const { value, name } = event.target;
     setLogins((prevState) => ({ ...prevState, [name]: value }));
   }, []);
@@ -137,7 +141,7 @@ function SignIn() {
                 component:<Person/>,
                 direction: "right"
               }}
-              onChange={handleonChange}
+              onChange={handleOnChange}
               name={"userid"}
               type={"text"}
               placeholder="User ID" />
@@ -148,15 +152,32 @@ function SignIn() {
               Password
             </SoftTypography>
           </SoftBox>
-          <SoftInput
-              icon={{
-                component: <Password/>,
-                direction: "right"
-              }}
-              onChange={handleonChange}
-              type={'password'}
-              name="password"
-              placeholder="Password" />
+          <SoftBox sx={{
+            display:'flex',
+            alignItems: "center",
+            borderWidth:"2px",
+            backgroundColor: '#fff',
+            border: "0.0625rem solid",
+            borderRadius: "0.5rem",
+            borderColor: "#d2d6da",
+            paddingRight: "0.75rem"
+          }}>
+            <SoftInput
+                sx={{
+                  outline:'none',
+                  border: 'none'
+                }}
+                icon={{
+                  component:'',
+                  direction: "right"
+                }}
+                onChange={handleOnChange}
+                type={icon?'password':'text'}
+                name="password"
+                placeholder="Password" />
+            <div style={{cursor:'pointer'}} onClick={()=>setIcon(!icon)}>{icon?<Key/>:<RemoveRedEyeOutlined/>}</div>
+          </SoftBox>
+
         </SoftBox>
         <SoftBox display="flex" alignItems="center">
           <Switch checked={rememberMe} onChange={handleSetRememberMe} />

@@ -236,9 +236,8 @@ function Dashboard() {
                     alignItem={'center'}
                 >
                   <MyCalendar/>
-                </SoftBox></Card>
-
-
+                </SoftBox>
+              </Card>
             </Grid>
           </Grid>
         </SoftBox>
